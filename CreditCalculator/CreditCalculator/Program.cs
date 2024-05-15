@@ -54,7 +54,7 @@ var sumPercentPayment = 0d;
 var sumMainDeptPayment = 0d;
 Console.WriteLine($"График платежа");
 Console.WriteLine($"№ \t Платеж\t\t тело креда\tпроценты\tостаток долга");
-
+var paymentInfoList = new List<PaymentInfo>();
 while (dept > 0)
 {
     
@@ -74,6 +74,7 @@ while (dept > 0)
 
     var info = new PaymentInfo(paymentNumber, payment, Math.Round(mainDeptPayment, 2), Math.Round(percentPayment, 2), Math.Round(dept, 2));
     Console.WriteLine(info);
+    paymentInfoList.Add(info);
 
     sumPayment += payment;
     sumMainDeptPayment += mainDeptPayment;
@@ -84,7 +85,28 @@ Console.WriteLine($"Выплечено всего: {sumPayment:C}");
 Console.WriteLine($"Сумма выплначенного долга: {sumMainDeptPayment:C}");
 Console.WriteLine($"Сумма выплаченных процетов: {sumPercentPayment:C}");
 
+// псевдографическое представление 
+foreach (var info in paymentInfoList)
+{
+    PrintDeptAndPercent(info.MainDeptPayment, info.PercentPayment);
+}
 Console.ReadLine();
+return;
+
+
+void PrintDeptAndPercent(double left, double right)
+{
+    var oldColor = Console.ForegroundColor;
+    var total = left + right;
+    var countLeft = (int)(left / total * 100);
+    var countRight = 100 - countLeft;
+
+    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+    Console.Write(new string('\\', countLeft));
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine(new string('\\', countRight));
+    Console.ForegroundColor = oldColor;
+}
 
 internal record PaymentInfo(int PaymentNumber, double Payment, double MainDeptPayment, double PercentPayment, double Dept)
 {
