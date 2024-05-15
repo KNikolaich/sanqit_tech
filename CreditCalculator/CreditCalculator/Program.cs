@@ -32,15 +32,15 @@ var k = m * Math.Pow(1 + m, s) / (Math.Pow(1 + m, s) - 1);
 // ежемесячный платеж
 var x = c * k;
 
-var payment = Math.Round(x, 2);
-var totalPaymant = x * s;
-var totalPercent = totalPaymant - c;
+var payment = x;
+var totalPayment = x * s;
+var totalPercent = totalPayment - c;
 
-var mainDeptInPercent = (c / totalPaymant) * 100;
+var mainDeptInPercent = (c / totalPayment) * 100;
 var percentsInPercent = 100 - mainDeptInPercent;
 
 Console.WriteLine($"ежемесячный платеж: {payment:C}");
-Console.WriteLine($"всего платежей: {totalPaymant:C}");
+Console.WriteLine($"всего платежей: {totalPayment:C}");
 Console.WriteLine($"начисленные проценты: {totalPercent:C}");
 Console.WriteLine($"От общей уплаченой суммы. основной долг: {mainDeptInPercent:0.00}%; кол-во переплаченых процентов: {percentsInPercent:0.00}%");
 
@@ -49,11 +49,12 @@ var dept = c;
 
 var paymentNumber = 0;
 var sumPayment = 0d;
-var sumMaindebtPerson = 0d;
-var sumPersonPerson = 0d;
 
-double sumPercentPayment = 0d;
-double sumMainDeptPayment = 0d;
+var sumPercentPayment = 0d;
+var sumMainDeptPayment = 0d;
+Console.WriteLine($"График платежа");
+Console.WriteLine($"№ \t Платеж\t\t тело креда\tпроценты\tостаток долга");
+
 while (dept > 0)
 {
     
@@ -71,7 +72,7 @@ while (dept > 0)
 
     dept -= mainDeptPayment;
 
-    var info = new PaymentInfo(paymentNumber, payment, Math.Round(mainDeptPayment, 2), Math.Round(percentPayment));
+    var info = new PaymentInfo(paymentNumber, payment, Math.Round(mainDeptPayment, 2), Math.Round(percentPayment, 2), Math.Round(dept, 2));
     Console.WriteLine(info);
 
     sumPayment += payment;
@@ -85,4 +86,7 @@ Console.WriteLine($"Сумма выплаченных процетов: {sumPerc
 
 Console.ReadLine();
 
-record PaymentInfo(int PaymentNumber, double Payment, double MainDeptPayment, double Percent);
+internal record PaymentInfo(int PaymentNumber, double Payment, double MainDeptPayment, double PercentPayment, double Dept)
+{
+    public override string ToString() => $"{PaymentNumber}\t {Payment:C}\t {MainDeptPayment:C}\t {PercentPayment:C}\t{Dept:C}";
+}
