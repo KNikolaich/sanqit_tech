@@ -13,7 +13,18 @@ var percentPerYear = double.Parse(Console.ReadLine()!) / 100;
 Console.WriteLine("На сколько месяцев берёте креди?");
 var s = int.Parse(Console.ReadLine()!);
 
-var calculator = new Calculator();
+
+CalcType kindOfCalc;
+do
+{
+    Console.WriteLine($"Какой тип расчета использовать. {CalcType.Annuity}({(int)CalcType.Annuity}) или {CalcType.Differentiated}({(int)CalcType.Differentiated})");
+} while (!Enum.TryParse(Console.ReadLine()!, out kindOfCalc) || (kindOfCalc != CalcType.Annuity && kindOfCalc != CalcType.Differentiated));
+
+ICreditCalculator calculator = kindOfCalc switch
+{
+    CalcType.Annuity => new AnnuityCalculator(),
+    CalcType.Differentiated => new DifferentiatedCalculator()
+};
 
 var calculationResult = calculator.Calculate(new CalculationParameters(
     c,
@@ -21,6 +32,12 @@ var calculationResult = calculator.Calculate(new CalculationParameters(
     s
 ));
 
+Console.WriteLine(kindOfCalc switch
+    {
+        CalcType.Annuity => "Аннуентный платеж",
+        CalcType.Differentiated => "Диффиренцированный платеж"
+    });
+;
 calculationResult.Print();
 
 Console.ReadKey();

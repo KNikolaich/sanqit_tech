@@ -1,6 +1,6 @@
 ﻿namespace CreditCalculator;
 
-internal class Calculator
+internal class AnnuityCalculator : ICreditCalculator
 {
     public CalculationResult Calculate(
         CalculationParameters parameters
@@ -24,7 +24,7 @@ internal class Calculator
         while (debt > 0)
         {
             paymentNumber++;
-            var percentPayment =debt * m;
+            var percentPayment = debt * m;
             var mainDebtPayment = paymentForCalculation - percentPayment;
 
             if (debt < mainDebtPayment)
@@ -34,7 +34,7 @@ internal class Calculator
                 paymentForCalculation = mainDebtPayment;
             }
 
-            debt = debt - mainDebtPayment;
+            debt -= mainDebtPayment;
             var paymentInfo = new PaymentInfo(
                 paymentNumber,
                 paymentForCalculation,

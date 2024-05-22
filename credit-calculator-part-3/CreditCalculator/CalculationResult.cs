@@ -1,7 +1,7 @@
 ﻿namespace CreditCalculator;
 
 internal record CalculationResult(
-    double Payment,
+    double? Payment,
     double SumPayment,
     double SumMainDebtPayment,
     double SumPercentPayment,
