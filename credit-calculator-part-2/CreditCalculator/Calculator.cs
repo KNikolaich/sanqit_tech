@@ -10,7 +10,7 @@ internal class Calculator
         var k = m * Math.Pow(1 + m, parameters.PeriodsCount) / (Math.Pow(1 + m, parameters.PeriodsCount) - 1);
         var x = parameters.CreditSum * k;
 
-        var payment = Math.Round(x, 2);
+        var payment = x;
 
         var debt = parameters.CreditSum;
 
@@ -24,8 +24,8 @@ internal class Calculator
         while (debt > 0)
         {
             paymentNumber++;
-            var percentPayment = Math.Round(debt * m, 2);
-            var mainDebtPayment = Math.Round(paymentForCalculation - percentPayment, 2);
+            var percentPayment =debt * m;
+            var mainDebtPayment = paymentForCalculation - percentPayment;
 
             if (debt < mainDebtPayment)
             {
@@ -34,7 +34,7 @@ internal class Calculator
                 paymentForCalculation = mainDebtPayment;
             }
 
-            debt = Math.Round(debt - mainDebtPayment, 2);
+            debt = debt - mainDebtPayment;
             var paymentInfo = new PaymentInfo(
                 paymentNumber,
                 paymentForCalculation,
@@ -48,7 +48,7 @@ internal class Calculator
             sumPercentPayment += percentPayment;
         }
         
-        var mainDebtInPercent = Math.Round(parameters.CreditSum / sumPayment, 2) * 100;
+        var mainDebtInPercent = parameters.CreditSum / sumPayment * 100;
         var percentsInPercent = 100 - mainDebtInPercent;
 
         return new CalculationResult(

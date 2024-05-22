@@ -16,16 +16,16 @@ internal static class PaymentInfosExtensions
             paymentInfos
             ) = calculationResult;
 
-        Console.WriteLine($"Ежемесячный платёж {payment:0.00}");
-        Console.WriteLine($"Начисленные процены {sumPercentPayment:0.00}");
-        Console.WriteLine($"Долг + проценты {sumPayment:0.00}");
+        Console.WriteLine($"Ежемесячный платёж {payment:C}");
+        Console.WriteLine($"Начисленные процены {sumPercentPayment:C}");
+        Console.WriteLine($"Долг + проценты {sumPayment:C}");
         Console.WriteLine($"От общей уплаченной суммы: Основной длог={mainDebtInPercent:0.00}%;Проценты={percentsInPercent:0.00}%");
 
         paymentInfos.Print();
 
-        Console.WriteLine($"Выплачено всего: {sumPayment:0.00}");
-        Console.WriteLine($"Сумма выплаченного долга:{sumMainDebtPayment:0.00}");
-        Console.WriteLine($"Сумма выплаченных процентов:{sumPercentPayment:0.00}");
+        Console.WriteLine($"Выплачено всего: {sumPayment:C}");
+        Console.WriteLine($"Сумма выплаченного долга:{sumMainDebtPayment:C}");
+        Console.WriteLine($"Сумма выплаченных процентов:{sumPercentPayment:C}");
 
         paymentInfos.PrintAsDiagram();
     }
@@ -37,7 +37,7 @@ internal static class PaymentInfosExtensions
         Console.WriteLine("№\tСумма платежа\tПлатёж по основному долгу\tПлатёж по процентам\tОстаток долга");
         foreach (var paymentInfo in paymentInfos)
         {
-            Console.WriteLine($"{paymentInfo.PaymentNumber}\t{paymentInfo.Payment:0.00}\t{paymentInfo.MainDebtPayment:0.00}\t\t\t{paymentInfo.PercentPayment:0.00}\t\t\t{paymentInfo.Debt:0.00}");
+            Console.WriteLine($"{paymentInfo.PaymentNumber}\t\t{paymentInfo.Payment:C}\t{paymentInfo.MainDebtPayment:C}\t\t\t{paymentInfo.PercentPayment:C}\t\t\t{paymentInfo.Debt:C}");
         }
     }
 
@@ -60,9 +60,9 @@ internal static class PaymentInfosExtensions
         var countLeft = (int)(left / total * 100);
         var countRight = 100 - countLeft;
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        Console.Write(new string('#', countLeft));
+        Console.Write(new string('░', countLeft));
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(new string('#', countRight));
+        Console.WriteLine(new string('▓', countRight));
         Console.ForegroundColor = color;
     }
 }
