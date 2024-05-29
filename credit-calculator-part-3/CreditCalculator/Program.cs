@@ -10,7 +10,7 @@ Console.WriteLine("Какая сумма кредита?");
 var c = double.Parse(Console.ReadLine()!);
 Console.WriteLine("Какая процентная ставка?");
 var percentPerYear = double.Parse(Console.ReadLine()!) / 100;
-Console.WriteLine("На сколько месяцев берёте креди?");
+Console.WriteLine("На сколько месяцев берёте кредит?");
 var s = int.Parse(Console.ReadLine()!);
 
 

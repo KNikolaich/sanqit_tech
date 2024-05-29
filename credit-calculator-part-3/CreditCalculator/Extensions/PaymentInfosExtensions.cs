@@ -60,9 +60,9 @@ internal static class PaymentInfosExtensions
         var countLeft = (int)(left / total * 100);
         var countRight = 100 - countLeft;
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        Console.Write(new string('░', countLeft));
+        Console.Write(new string('♦', countLeft));
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(new string('▓', countRight));
+        Console.WriteLine(new string('♦', countRight));
         Console.ForegroundColor = color;
     }
 }
