@@ -3,7 +3,7 @@ version: '3.4'
 services:
   creditcalculator.api:
     image: ${DOCKER_REGISTRY-}creditcalculatorapi
-    container_name: creditcalculator.api
+    container_name: ccalc.api
     build:
       context: .
       dockerfile: CreditCalculator.API/Dockerfile
