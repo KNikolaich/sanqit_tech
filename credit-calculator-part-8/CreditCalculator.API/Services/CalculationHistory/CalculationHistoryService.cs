@@ -18,7 +18,7 @@ internal class CalculationHistoryService(
 
     public void SaveCalculationHistory(CalculationHistory calculationHistory)
     {
-        calculationHistory.CreatedOn = DateTime.Now;
+        calculationHistory.CreatedOn = DateTime.UtcNow;
         calculationHistoryRepository.AddHistory(calculationHistory);
     }
 }

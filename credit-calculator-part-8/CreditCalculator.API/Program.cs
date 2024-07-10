@@ -1,7 +1,9 @@
+using System.Reflection;
 using CreditCalculator.API.Converters;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CreditCalculator.API.Extensions;
+using DbUp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "CreditCalculator.API.xml"));
 });
 
-builder.Services.AddApplicationServices();
+builder.AddApplicationServices();
 
 var app = builder.Build();
 
@@ -38,4 +40,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+var connectionString = app.Configuration.GetConnectionString("DefaultConnection");
+
+var upgrader =
+    DeployChanges.To
+        .PostgresqlDatabase(connectionString)
+        .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+        .LogToConsole()
+        .Build();
+
+var result = upgrader.PerformUpgrade();
+
+if (result.Successful)
+{
+    app.Run();
+}

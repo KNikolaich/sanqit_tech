@@ -2,6 +2,7 @@
 
 using Core;
 using Mappers;
+using Microsoft.EntityFrameworkCore;
 using Services.CalculationHistory.Models;
 
 public interface ICreditCalculationHistoryRepository
@@ -20,8 +21,9 @@ internal class CreditCalculationHistoryRepository(
         dbContext.SaveChanges();
     }
 
-    public IReadOnlyCollection<CalculationHistory> GetCalculationHistory() =>
-        dbContext.CalculationHistory.Select(x => new CalculationHistory(
+    public IReadOnlyCollection<CalculationHistory> GetCalculationHistory()
+    {
+        var calculationHistoryQueryable = dbContext.CalculationHistory.Select(x => new CalculationHistory(
             x.CalcType,
             new CalculationParameters(
                 x.CalculationHistoryParameters.Credit,
@@ -47,5 +49,9 @@ internal class CreditCalculationHistoryRepository(
         )
         {
             CreatedOn = x.CreatedOn
-        }).ToList();
+        });
+
+        var queryString = calculationHistoryQueryable.ToQueryString();
+        return calculationHistoryQueryable.ToList();
+    }
 }

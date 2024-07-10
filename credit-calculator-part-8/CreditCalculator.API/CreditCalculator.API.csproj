@@ -11,8 +11,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\Script0001 - Create calculation_history table.sql" />
+    <None Remove="Scripts\Script0002 - Create calculation_history_parameters table.sql" />
+    <None Remove="Scripts\Script0003 - Create calculation_history_results table.sql" />
+    <None Remove="Scripts\Script0004 - Create calculation_history_payment_infos table.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Script0001 - Create calculation_history table.sql" />
+    <EmbeddedResource Include="Scripts\Script0002 - Create calculation_history_parameters table.sql" />
+    <EmbeddedResource Include="Scripts\Script0003 - Create calculation_history_results table.sql" />
+    <EmbeddedResource Include="Scripts\Script0004 - Create calculation_history_payment_infos table.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dbup-postgresql" Version="5.0.40" />
+    <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 

@@ -7,18 +7,24 @@ using Services.CalculationHistory;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
     {
+        var services = builder.Services;
+        var configuration = builder.Configuration;
+
         services.AddScoped<CreditCalculatorFactory>();
         services.AddScoped<ICalculationHistoryService, CalculationHistoryService>();
         services.AddScoped<ICreditCalculationHistoryRepository, CreditCalculationHistoryRepository>();
 
         services.AddDbContext<CreditCalculatorDbContext>(opt =>
         {
-            opt.UseInMemoryDatabase("CreditCalculator");
+            opt
+                .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+                .UseSnakeCaseNamingConvention();
+            //opt.UseInMemoryDatabase("CreditCalculator");
             opt.LogTo(Console.WriteLine);
         });
 
-        return services;
+        return builder;
     }
 }
