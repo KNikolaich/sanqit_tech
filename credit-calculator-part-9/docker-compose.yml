@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  creditcalculator.api:
+    image: ${DOCKER_REGISTRY-}creditcalculatorapi
+    container_name: creditcalculator.api
+    build:
+      context: .
+      dockerfile: CreditCalculator.API/Dockerfile
+
+  credit-calculator-db:
+    image: postgres:latest
+    container_name: credit-calculator-db
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    depends_on:
+      - credit-calculator-db
