@@ -27,7 +27,7 @@ render(reateInputElement, parametersContainer);
 render(periodInputElement, parametersContainer);
 render(calcTypeElement, parametersContainer);
 
-const calculateButtonElement = createElement<HTMLButtonElement>(`<button>Calculate</button>`);
+const calculateButtonElement = createElement<HTMLButtonElement>(`<button>Рассчитать</button>`);
 calculateButtonElement.addEventListener("click", async () => {
     const calculationParameters : CalculationParameters = {
         credit: parseFloat(creditInputElement.value),

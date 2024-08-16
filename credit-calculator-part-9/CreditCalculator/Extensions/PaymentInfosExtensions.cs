@@ -47,20 +47,19 @@ internal static class PaymentInfosExtensions
         this IReadOnlyCollection<PaymentInfo> paymentInfos
     )
     {
+        var maxPayment = paymentInfos.Select(x =>x.Payment).Max();
         foreach (var paymentInfo in paymentInfos)
         {
-            PrintDebtAndPercents(paymentInfo.MainDebtPayment, paymentInfo.PercentPayment);
+            PrintDebtAndPercents(paymentInfo.MainDebtPayment, paymentInfo.PercentPayment, maxPayment);
         }
     }
 
-    private static void PrintDebtAndPercents(double left, double right)
+    private static void PrintDebtAndPercents(double left, double right, double totalMax)
     {
-        var total = left + right;
-
         var color = Console.ForegroundColor;
 
-        var countLeft = (int)(left / total * 100);
-        var countRight = 100 - countLeft;
+        var countLeft = (int)(left / totalMax * 100);
+        var countRight = (int)(right / totalMax * 100);
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.Write(new string('#', countLeft));
         Console.ForegroundColor = ConsoleColor.Yellow;
