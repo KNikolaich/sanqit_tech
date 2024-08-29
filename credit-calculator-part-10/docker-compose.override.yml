@@ -7,6 +7,8 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ServiceOptions__DisableCalculationHistory=true
+      - CorsOptions__Origins__0=http://localhost:7123
+      - CorsOptions__Origins__1=http://localhost:1234
     ports:
       - "7080:8080"
       - "7081:8081"
@@ -31,3 +33,7 @@ services:
       - "6080:80"
     volumes:
       - ./volumes/pgadmin:/var/lib/pgadmin:rw
+
+  creditcalculator.ui:
+    ports:
+      - "7123:80"

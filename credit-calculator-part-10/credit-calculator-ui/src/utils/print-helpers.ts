@@ -13,8 +13,6 @@ const printCalculationResult = (calculationResult: CalculationResult, container:
     } = calculationResult;
 
     container.innerHTML = '';
-
-
     const commonInfoElement = createElement<HTMLTableElement>(`
 <table>
   <tr>
@@ -36,9 +34,6 @@ const printCalculationResult = (calculationResult: CalculationResult, container:
 </table>
 `);
     render(commonInfoElement, container);
-
-    const diagramElement = createDiagramElement(paymentInfos);
-    render(diagramElement, container);
 
     const paymentInfosElement = createElement<HTMLTableElement>(`
 <table>
@@ -79,15 +74,20 @@ const printCalculationResult = (calculationResult: CalculationResult, container:
 </table>
 `);
 
-  render(totalInfoElement, container);
+    render(totalInfoElement, container);
+
+    const diagramElement = createDiagramElement(paymentInfos);
+    render(diagramElement, container);
 }
 
 const createDiagramElement = (paymentInfos: PaymentInfo[]) => {
-    const maxPayment = paymentInfos[0].payment;
     return createElement<HTMLDivElement>(`
 <div class="diagram">${paymentInfos.map((paymentInfo) => {
-    const percentWidth = paymentInfo.payment * 100 / maxPayment;
-    return `<progress value="${paymentInfo.mainDebtPayment}" max="${paymentInfo.payment}" style="width: ${percentWidth}%;"></progress>`
+    const left = paymentInfo.mainDebtPayment;
+    const right = paymentInfo.percentPayment;
+    const total = left + right;
+    const countLeft = left / total * 100;
+    return `<progress value="${countLeft}" max="100"></progress>`
 }).join("")}
 </div>
 `);

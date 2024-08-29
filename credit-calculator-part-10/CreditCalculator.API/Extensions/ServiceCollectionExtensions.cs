@@ -15,6 +15,15 @@ public static class ServiceCollectionExtensions
 
         services.Configure<ServiceOptions>(configuration.GetRequiredSection(nameof(ServiceOptions)));
 
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policyBuilder =>
+            {
+                var corsOptions = builder.Configuration.GetRequiredSection(nameof(CorsOptions)).Get<CorsOptions>()!;
+                policyBuilder.WithOrigins(corsOptions.Origins).AllowAnyMethod().AllowAnyHeader();
+            });
+        });
+
         services.AddScoped<CreditCalculatorFactory>();
         services.AddScoped<ICalculationHistoryService, CalculationHistoryService>();
         services.AddScoped<ICreditCalculationHistoryRepository, CreditCalculationHistoryRepository>();

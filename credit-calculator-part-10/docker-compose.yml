@@ -17,3 +17,10 @@ services:
     container_name: pgadmin
     depends_on:
       - credit-calculator-db
+
+  creditcalculator.ui:
+    image: ${DOCKER_REGISTRY-}creditcalculatorui
+    container_name: creditcalculator-ui
+    build: 
+      context: credit-calculator-ui
+      dockerfile: Dockerfile
