@@ -2,174 +2,180 @@
 using CreditCalculator.Core;
 using CreditCalculator.Extensions;
 
-Console.OutputEncoding = Encoding.UTF8;
-
-var inputContext = new Dictionary<InputKey, object>
+internal class Program
 {
-    { InputKey.Credit , 0d },
-    { InputKey.Rate, 0d },
-    { InputKey.Period , 0 },
-    { InputKey.CalcType, CalcType.Annuity }
-};
-
-inputContext.Print();
-
-var creditCalculatorFactory = new CreditCalculatorFactory();
-while (true)
-{
-    var val = Console.ReadLine()!.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-    var command = val[0];
-    var input = new ArraySegment<string>(val, 1, val.Length - 1).ToArray();
-    Console.Clear();
-    if (command == "exit")
+    private static void Main(string[] args)
     {
-        break;
-    }
+        Console.OutputEncoding = Encoding.UTF8;
 
-    switch (command)
-    {
-        case "reset":
+        var inputContext = new Dictionary<InputKey, object>
         {
-            inputContext[InputKey.Credit] = 0d;
-            inputContext[InputKey.Rate] = 0d;
-            inputContext[InputKey.Period] = 0;
-            inputContext[InputKey.CalcType] = CalcType.Annuity;
-            inputContext.Print();
-            break;
-        }
-        case "print":
+            { InputKey.Credit , 0d },
+            { InputKey.Rate, 0d },
+            { InputKey.Period , 0 },
+            { InputKey.CalcType, CalcType.Annuity }
+        };
+
+        inputContext.Print();
+
+        var creditCalculatorFactory = new CreditCalculatorFactory();
+        while (true)
         {
-            if (input.Length == 1)
+            var val = Console.ReadLine()!.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var command = val[0];
+            var input = new ArraySegment<string>(val, 1, val.Length - 1).ToArray();
+            Console.Clear();
+            if (command == "exit")
             {
-                switch (input[0])
-                {
-                    case "input":
+                break;
+            }
+
+            switch (command)
+            {
+                case "reset":
                     {
+                        inputContext[InputKey.Credit] = 0d;
+                        inputContext[InputKey.Rate] = 0d;
+                        inputContext[InputKey.Period] = 0;
+                        inputContext[InputKey.CalcType] = CalcType.Annuity;
                         inputContext.Print();
                         break;
                     }
-                    case "result":
+                case "print":
                     {
-                        if (TryExtractParameters(inputContext, out var calculationParameters, out var errors))
+                        if (input.Length == 1)
                         {
-                            var calculator = creditCalculatorFactory
-                                    .CreateCalculator((CalcType)inputContext[InputKey.CalcType]);
-                            var calculationResult = calculator.Calculate(calculationParameters);
-                            Console.WriteLine();
-                            calculationResult.Print();
+                            switch (input[0])
+                            {
+                                case "input":
+                                    {
+                                        inputContext.Print();
+                                        break;
+                                    }
+                                case "result":
+                                    {
+                                        if (TryExtractParameters(inputContext, out var calculationParameters, out var errors))
+                                        {
+                                            var calculator = creditCalculatorFactory.CreateCalculator((CalcType)inputContext[InputKey.CalcType]);
+                                            var calculationResult = calculator.Calculate(calculationParameters);
+                                            Console.WriteLine();
+                                            calculationResult.Print();
+                                        }
+                                        else
+                                        {
+                                            foreach (var error in errors)
+                                            {
+                                                Console.WriteLine(error);
+                                            }
+                                        }
+
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        Console.WriteLine("Не верный параметр");
+                                        break;
+                                    }
+                            }
                         }
                         else
                         {
-                            foreach (var error in errors)
-                            {
-                                Console.WriteLine(error);
-                            }
+                            inputContext.Print();
                         }
 
                         break;
                     }
-                    default:
+                case "set":
                     {
-                        Console.WriteLine("Не верный параметр");
+                        if (!Enum.TryParse<InputKey>(input[0], true, out var inputKey))
+                        {
+                            Console.WriteLine("Не корректное имя переменной в контексте");
+                            continue;
+                        }
+
+                        switch (inputKey)
+                        {
+                            case InputKey.Credit:
+                            case InputKey.Rate:
+                                {
+                                    if (double.TryParse(input[1], out var value))
+                                    {
+                                        inputContext[inputKey] = value;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"Значение {inputKey} не корректно");
+                                    }
+                                    break;
+                                }
+                            case InputKey.Period:
+                                {
+                                    if (int.TryParse(input[1], out var value))
+                                    {
+                                        inputContext[inputKey] = value;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"Значение {inputKey} не корректно");
+                                    }
+                                    break;
+                                }
+                            case InputKey.CalcType:
+                                {
+                                    if (Enum.TryParse<CalcType>(input[1], true, out var calcType))
+                                    {
+                                        inputContext[inputKey] = calcType;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"Значение {inputKey} не корректно");
+                                    }
+                                    break;
+                                }
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                        inputContext.Print();
                         break;
                     }
-                }
             }
-            else
-            {
-                inputContext.Print();
-            }
-
-            break;
         }
-        case "set":
+
+        return;
+    }
+
+
+    static bool TryExtractParameters(
+        IDictionary<InputKey, object> dict,
+        out CalculationParameters calculationParameters,
+        out List<string> errors
+    )
+    {
+        errors = [];
+
+        var creditSum = (double)dict[InputKey.Credit];
+        var rate = (double)dict[InputKey.Rate] / 100;
+        var period = (int)dict[InputKey.Period];
+
+        if (creditSum <= 0)
         {
-            if (!Enum.TryParse<InputKey>(input[0], true, out var inputKey))
-            {
-                Console.WriteLine("Не корректное имя переменной в контексте");
-                continue;
-            }
-
-            switch (inputKey)
-            {
-                case InputKey.Credit:
-                case InputKey.Rate:
-                {
-                    if (double.TryParse(input[1], out var value))
-                    {
-                        inputContext[inputKey] = value;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Значение {inputKey} не корректно");
-                    }
-                    break;
-                }
-                case InputKey.Period:
-                {
-                    if(int.TryParse(input[1], out var value))
-                    {
-                        inputContext[inputKey] = value;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Значение {inputKey} не корректно");
-                    }
-                    break;
-                }
-                case InputKey.CalcType:
-                {
-                    if(Enum.TryParse<CalcType>(input[1], true, out var calcType))
-                    {
-                        inputContext[inputKey] = calcType;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Значение {inputKey} не корректно");
-                    }
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            inputContext.Print();
-            break;
+            errors.Add("Сумма кредита должна быть больше 0");
         }
+
+        if (rate <= 0)
+        {
+            errors.Add("Процентная ставка должна быть больше 0");
+        }
+
+        if (period < 1)
+        {
+            errors.Add("Период должен быть больше 0");
+        }
+
+        calculationParameters = new CalculationParameters(creditSum, rate, period);
+        return errors.Count == 0;
     }
-}
-
-return;
-
-bool TryExtractParameters(
-    IDictionary<InputKey, object> dict,
-    out CalculationParameters calculationParameters,
-    out List<string> errors
-)
-{
-    errors = [];
-
-    var creditSum = (double)dict[InputKey.Credit];
-    var rate = (double)dict[InputKey.Rate] / 100;
-    var period = (int)dict[InputKey.Period];
-
-    if (creditSum <= 0)
-    {
-        errors.Add("Сумма кредита должна быть больше 0");
-    }
-
-    if (rate <= 0)
-    {
-        errors.Add("Процентная ставка должна быть больше 0");
-    }
-
-    if (period < 1)
-    {
-        errors.Add("Период должен быть больше 0");
-    }
-
-    calculationParameters = new CalculationParameters(creditSum, rate, period);
-    return errors.Count == 0;
 }
 
 internal enum InputKey

@@ -1,6 +1,6 @@
 ﻿namespace CreditCalculator.Core;
 
-internal class AnnuityCreditCalculator : ICreditCalculator
+public class AnnuityCreditCalculator : ICreditCalculator
 {
     public CalculationResult Calculate(
         CalculationParameters parameters
@@ -8,9 +8,7 @@ internal class AnnuityCreditCalculator : ICreditCalculator
     {
         var m = parameters.Rate / 12;
         var k = m * Math.Pow(1 + m, parameters.Period) / (Math.Pow(1 + m, parameters.Period) - 1);
-        var x = parameters.Credit * k;
-
-        var payment = x;
+        var payment = parameters.Credit * k;
 
         var debt = parameters.Credit;
 

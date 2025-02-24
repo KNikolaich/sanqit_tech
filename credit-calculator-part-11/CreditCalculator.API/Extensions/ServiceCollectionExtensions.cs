@@ -30,10 +30,10 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<CreditCalculatorDbContext>(opt =>
         {
-            opt
-                .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                .UseSnakeCaseNamingConvention();
-            //opt.UseInMemoryDatabase("CreditCalculator");
+            //opt
+            //    .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+            //    .UseSnakeCaseNamingConvention();
+            opt.UseInMemoryDatabase("CreditCalculator");
             opt.LogTo(Console.WriteLine);
         });
 

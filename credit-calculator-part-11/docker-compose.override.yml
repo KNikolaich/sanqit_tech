@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   creditcalculator.api:
     environment:
@@ -16,13 +14,15 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
-  credit-calculator-db:
+  pgsql-db:
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./volumes/credit-calculator-db:/var/lib/postgresql/data:rw
+      - ./volumes/pgsql-db:/var/lib/postgresql/data:rw
 
   pgadmin:
     environment:

@@ -40,18 +40,19 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var connectionString = app.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = app.Configuration.GetConnectionString("DefaultConnection");
 
-var upgrader =
-    DeployChanges.To
-        .PostgresqlDatabase(connectionString)
-        .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
-        .LogToConsole()
-        .Build();
+//var upgrader =
+//    DeployChanges.To
+//        .PostgresqlDatabase(connectionString)
+//        .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+//        .LogToConsole()
+//        .Build();
 
-var result = upgrader.PerformUpgrade();
+//var result = upgrader.PerformUpgrade();
 
-if (result.Successful)
-{
-    app.Run();
-}
+//if (result.Successful)
+//{
+//    app.Run();
+//}
+app.Run();
