@@ -1,0 +1,60 @@
+body {
+    font-family: sans-serif;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+}
+
+.parameters-container,
+.results-container,
+.diagram {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.diagram {
+    max-width: 1000px;
+}
+
+.diagram>progress {
+    width: 100%;
+}
+
+.diagram>progress {
+    display: block;
+    vertical-align: baseline;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 14px;
+    border: 0;
+    border-radius: 1px;
+    margin: 2px 0px;
+    box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 0.5px 0.5px rgba(0, 0, 0, 0.15);
+    background: yellow;
+    color: #8b008b;
+}
+
+/* Foreground - webkit browsers */
+.diagram>progress::-webkit-progress-value {
+    background: #8b008b;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+}
+
+/* Background - webkit browsers */
+.diagram>progress::-webkit-progress-bar {
+    background: yellow;
+}
+
+/* Foreground - Firefox */
+.diagram>progress::-moz-progress-bar {
+    background: #8b008b;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+}

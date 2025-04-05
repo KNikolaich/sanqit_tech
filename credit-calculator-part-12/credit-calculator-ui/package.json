@@ -1,0 +1,27 @@
+{
+  "name": "credit-calculator-ui",
+  "version": "1.0.0",
+  "description": "UI for credit calculator backend",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build index.html",
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanqit/credit-calculator.git"
+  },
+  "author": "sanqit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanqit/credit-calculator/issues"
+  },
+  "homepage": "https://github.com/sanqit/credit-calculator#readme",
+  "devDependencies": {
+    "typescript": "5.4.5"
+  },
+  "dependencies": {
+    "parcel-bundler": "1.12.5"
+  }
+}

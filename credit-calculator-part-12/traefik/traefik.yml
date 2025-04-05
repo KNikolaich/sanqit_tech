@@ -1,0 +1,17 @@
+api:
+  dashboard: true
+tls:
+  certificates:
+   - certFile: /certs/sanqit.ru.crt
+     keyFile: /certs/sanqit.ru.key
+     stores:
+       - default
+  options:
+    default:
+      minVersion: VersionTLS12
+      maxVersion: VersionTLS13
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/sanqit.ru.crt
+        keyFile: /certs/sanqit.ru.key
