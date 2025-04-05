@@ -1,0 +1,72 @@
+version: '3.4'
+
+networks:
+  web:
+    external: true
+
+services:
+  creditcalculator.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      #- ASPNETCORE_HTTPS_PORTS=8081
+      - ServiceOptions__DisableCalculationHistory=true
+      - CorsOptions__Origins__0=http://localhost:7123
+      - CorsOptions__Origins__1=http://localhost:1234
+      - CorsOptions__Origins__2=https://credit-calculator.sanqit.ru
+      - Kestrel__Certificates__Default__Path=/home/app/.aspnet/https/sanqit.ru.pfx
+      - Kestrel__Certificates__Default__Password=your password
+    ports:
+      - "7080:8080"
+      - "7081:8081"
+    volumes:
+      #- ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      #- ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - /home/deploy/usersecrets:/home/app/.microsoft/usersecrets:ro
+      - /home/deploy/certs:/home/app/.aspnet/https:ro
+    labels:
+      - traefik.enable=true
+      # http router
+      - traefik.http.routers.creditcalculator_api_http.entrypoints=websecure
+      - traefik.http.routers.creditcalculator_api_http.rule=Host(`api-credit-calculator.sanqit.ru`)
+      - traefik.http.routers.creditcalculator_api_http.service=creditcalculator_api_http
+      # service
+      - traefik.http.services.creditcalculator_api_http.loadbalancer.server.port=8080
+      - traefik.http.services.creditcalculator_api_http.loadbalancer.server.scheme=http
+    networks:
+      - web
+
+  credit-calculator-db:
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./volumes/credit-calculator-db:/var/lib/postgresql/data:rw
+    networks:
+      - web
+
+#  pgadmin:
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: "test@test.test"
+#      PGADMIN_DEFAULT_PASSWORD: "test"
+#      PGADMIN_CONFIG_SERVER_MODE: "False"
+#    ports:
+#      - "6080:80"
+#    volumes:
+#      - ./volumes/pgadmin:/var/lib/pgadmin:rw
+
+  creditcalculator.ui:
+    ports:
+      - "7123:80"
+    labels:
+      - traefik.enable=true
+      # http router
+      - traefik.http.routers.creditcalculator_ui_http.entrypoints=websecure
+      - traefik.http.routers.creditcalculator_ui_http.rule=Host(`credit-calculator.sanqit.ru`)
+      - traefik.http.routers.creditcalculator_ui_http.service=creditcalculator_ui_http
+      # service
+      - traefik.http.services.creditcalculator_ui_http.loadbalancer.server.port=80
+      - traefik.http.services.creditcalculator_ui_http.loadbalancer.server.scheme=http
+    networks:
+      - web
